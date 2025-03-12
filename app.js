@@ -1,28 +1,24 @@
 const express = require('express')
-
+let users = require('./users')
 
 const app = express();
 
 
-
 app.get('/api/users', (req, res) => {
-    console.log(req.query);
-    res.send([
-        { id: 1, name: 'user1' },
-        { id: 2, name: 'user2' },
-    ])
+    res.json(
+        {
+            data: users,
+            message: "ok"
+        }
+    );
 })
-app.get('/api/users/:id', (req, res) => {
-    
-    res.send({ id: req.params.id, name: `user${req.params.id}` })
-})
+
 
 const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`listening on port ${port}`));
 
-app.listen(port, () => {
-    console.log(`listening on port ${port}`);
 
-})
+
 
 
 
