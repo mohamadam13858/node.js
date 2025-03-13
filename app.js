@@ -3,10 +3,17 @@ let users = require('./users')
 const app = express();
 const { body, validationResult } = require('express-validator')
 const helment = require('helmet')
+const morgan = require('morgan')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 app.use(helment())
+
+
+if (app.get('env') === 'development') {
+    console.log('morgan is active');
+    app.use(morgan('tiny'))
+}
 
 
 app.get('/api/users', (req, res) => {
@@ -41,7 +48,6 @@ app.post('/api/users', [
     body('first_name', 'first name cant be empty').notEmpty(),
     body('last_name', 'last name cant be empty').notEmpty(),
 ], (req, res) => {
-    return console.log(req.body);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -98,6 +104,10 @@ app.delete("/api/users/:id", (req, res) => {
         message: "ok"
     })
 })
+
+console.log('NODE_ENV: ', process.env.NODE_ENV);
+console.log(app.get('env'));
+
 
 
 const port = process.env.PORT || 3000;
