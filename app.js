@@ -4,10 +4,15 @@ const app = express();
 const { body, validationResult } = require('express-validator')
 const helment = require('helmet')
 const morgan = require('morgan')
+const config = require('config')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 app.use(helment())
+console.log("appilocation name:" , config.get("name"))
+console.log("appilocation version:" , config.get("version"))
+console.log("sms:" , config.get("sms"))
+
 
 
 if (app.get('env') === 'development') {
@@ -25,7 +30,7 @@ app.get('/api/users', (req, res) => {
     );
 })
 
-
+   
 
 app.get('/api/users/:id', (req, res) => {
     const Users = users.find(u => u.id === parseInt(req.params.id))
