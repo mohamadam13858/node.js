@@ -4,6 +4,18 @@ const app = express();
 const { body, validationResult } = require('express-validator')
 app.use(express.json())
 
+app.use((req, res, next) => {
+    req.body.username = "mohamad"
+    req.user = { id: 1, name: "mohamad" }
+    console.log('midd 1');
+    next()
+});
+
+app.use((req, res, next) => {
+    console.log('midd 2');
+
+    next();
+});
 
 app.get('/api/users', (req, res) => {
     res.json(
@@ -13,6 +25,12 @@ app.get('/api/users', (req, res) => {
         }
     );
 })
+
+
+app.use((req, res, next) => {
+    console.log('midd 3');
+    next()
+});
 
 app.get('/api/users/:id', (req, res) => {
     const Users = users.find(u => u.id === parseInt(req.params.id))
@@ -53,10 +71,10 @@ app.put('/api/users/:id', [
     body('first_name', 'first name cant be empty').notEmpty(),
     body('last_name', 'last name cant be empty').notEmpty(),
 ], (req, res) => {
-    const  user = users.find(u => u.id == req.params.id)
+    const user = users.find(u => u.id == req.params.id)
     if (!user) {
         return res.status(404).json({
-            data:null,
+            data: null,
             message: "the user with the given id was not"
         })
     }
@@ -64,9 +82,9 @@ app.put('/api/users/:id', [
     if (!errors.isEmpty()) {
         return res.status(400).json({ data: null, errors: errors.array(), message: "validation error" })
     }
-    users = users.map(user=>{
+    users = users.map(user => {
         if (user.id == req.params.id) {
-            return {...user , ...req.body}
+            return { ...user, ...req.body }
         }
         return user
     })
@@ -75,18 +93,18 @@ app.put('/api/users/:id', [
         message: "ok"
     })
 })
-app.delete("/api/users/:id" , (req,res)=>{
+app.delete("/api/users/:id", (req, res) => {
     const user = users.find(u => u.id == req.params.id)
     if (!user) {
         return res.status(404).json({
-            data:null,
+            data: null,
             message: "the user with the given id was not found"
         })
     }
     const index = users.indexOf(user)
-    users.splice(index,1)
+    users.splice(index, 1)
     res.json({
-        data : users , 
+        data: users,
         message: "ok"
     })
 })
