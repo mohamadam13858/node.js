@@ -75,6 +75,21 @@ app.put('/api/users/:id', [
         message: "ok"
     })
 })
+app.delete("/api/users/:id" , (req,res)=>{
+    const user = users.find(u => u.id == req.params.id)
+    if (!user) {
+        return res.status(404).json({
+            data:null,
+            message: "the user with the given id was not found"
+        })
+    }
+    const index = users.indexOf(user)
+    users.splice(index,1)
+    res.json({
+        data : users , 
+        message: "ok"
+    })
+})
 
 
 const port = process.env.PORT || 3000;
