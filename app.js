@@ -3,19 +3,10 @@ let users = require('./users')
 const app = express();
 const { body, validationResult } = require('express-validator')
 app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
-app.use((req, res, next) => {
-    req.body.username = "mohamad"
-    req.user = { id: 1, name: "mohamad" }
-    console.log('midd 1');
-    next()
-});
 
-app.use((req, res, next) => {
-    console.log('midd 2');
 
-    next();
-});
 
 app.get('/api/users', (req, res) => {
     res.json(
@@ -27,10 +18,6 @@ app.get('/api/users', (req, res) => {
 })
 
 
-app.use((req, res, next) => {
-    console.log('midd 3');
-    next()
-});
 
 app.get('/api/users/:id', (req, res) => {
     const Users = users.find(u => u.id === parseInt(req.params.id))
@@ -53,6 +40,8 @@ app.post('/api/users', [
     body('first_name', 'first name cant be empty').notEmpty(),
     body('last_name', 'last name cant be empty').notEmpty(),
 ], (req, res) => {
+    return console.log(req.body);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ data: null, errors: errors.array(), message: "validation error" })
