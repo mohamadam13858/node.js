@@ -2,10 +2,11 @@ const express = require('express')
 let users = require('./users')
 const app = express();
 const { body, validationResult } = require('express-validator')
+const helment = require('helmet')
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-
-
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static('public'))
+app.use(helment())
 
 
 app.get('/api/users', (req, res) => {
@@ -41,7 +42,7 @@ app.post('/api/users', [
     body('last_name', 'last name cant be empty').notEmpty(),
 ], (req, res) => {
     return console.log(req.body);
-    
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ data: null, errors: errors.array(), message: "validation error" })
