@@ -21,7 +21,7 @@ app.get('/api/users/:id', (req, res) => {
         message: "ok"
        })
    }else{
-    res.json({
+    res.status(404).json({
         data:null,
         message: 'the user with the given id was not found'
     })
