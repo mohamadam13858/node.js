@@ -5,6 +5,8 @@ const { body, validationResult } = require('express-validator')
 const helment = require('helmet')
 const morgan = require('morgan')
 const config = require('config')
+const debug = require('debug')('app:main')
+const dbdebug = require('debug')('app:db')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
@@ -12,10 +14,11 @@ app.use(helment())
 
 
 if (app.get('env') === 'development') {
-    console.log('morgan is active');
+    debug('morgan is active');
     app.use(morgan('tiny'))
 }
 
+dbdebug("connected to db")
 
 app.get('/api/users', (req, res) => {
     res.json(
