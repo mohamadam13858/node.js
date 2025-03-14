@@ -13,12 +13,20 @@ app.use(express.static('public'))
 app.use(helment())
 
 
+app.set('view engine', 'ejs')
+app.set('views' , './views')
+
 if (app.get('env') === 'development') {
     debug('morgan is active');
     app.use(morgan('tiny'))
 }
 
 dbdebug("connected to db")
+
+app.get('/', (req, res) => {
+  res.render('home' , {name : "mohamad"})
+})
+
 
 app.get('/api/users', (req, res) => {
     res.json(
@@ -29,7 +37,7 @@ app.get('/api/users', (req, res) => {
     );
 })
 
-   
+
 
 app.get('/api/users/:id', (req, res) => {
     const Users = users.find(u => u.id === parseInt(req.params.id))
