@@ -9,10 +9,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 app.use(helment())
-console.log("appilocation name:" , config.get("name"))
-console.log("appilocation version:" , config.get("version"))
-console.log("sms:" , config.get("sms"))
-
 
 
 if (app.get('env') === 'development') {
